@@ -11,13 +11,15 @@ foreach ($name in @('python', 'py')) {
 foreach ($candidate in $candidates) {
     if (-not (Test-Path -LiteralPath $candidate)) { continue }
     try {
-        & $candidate -c 'import tkinter; import PIL' 2>$null
+        & $candidate -c 'from PySide6 import QtWidgets; import PIL' 2>$null
         if ($LASTEXITCODE -eq 0) {
             & $candidate (Join-Path $PSScriptRoot 'app.py')
             exit $LASTEXITCODE
         }
     } catch { continue }
 }
-Write-Host 'Python com Tkinter e Pillow nao encontrado.'
-Write-Host 'Instale Python e execute: python -m pip install -r requirements.txt'
+Write-Host 'Dependencias do Pixel Livre nao encontradas.'
+Write-Host 'Na pasta do projeto, execute:'
+Write-Host 'python -m venv .venv'
+Write-Host '.\.venv\Scripts\python.exe -m pip install -r requirements.txt'
 Read-Host 'Pressione Enter para fechar'

@@ -1,1 +1,2 @@
 Pillow>=12.3.0,<13
+PySide6-Essentials>=6.8,<7

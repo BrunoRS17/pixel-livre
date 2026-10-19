@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    name: Windows / Python ${{ matrix.python }}
+    runs-on: windows-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Install development dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Run tests and measure coverage
+        run: python -m pytest --cov=pixel_livre --cov-report=term-missing --cov-report=xml --cov-fail-under=85 --junitxml=test-results.xml
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-reports-python-${{ matrix.python }}
+          path: |
+            coverage.xml
+            test-results.xml
+          retention-days: 14

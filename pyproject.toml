@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+qt_api = "pyside6"
+addopts = "-ra --strict-markers"
+markers = [
+    "ui: integration tests using the Qt event loop (offscreen by default)",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["pixel_livre"]
+omit = ["pixel_livre/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
