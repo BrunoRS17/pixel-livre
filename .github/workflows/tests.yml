@@ -44,3 +44,39 @@ jobs:
             coverage.xml
             test-results.xml
           retention-days: 14
+
+  windows-package:
+    name: Windows executable
+    needs: pytest
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            requirements-build.txt
+      - name: Install build and test dependencies
+        run: python -m pip install -r requirements-build.txt -r requirements-dev.txt
+      - name: Build portable Windows application
+        run: python scripts/build_windows.py
+      - name: Test the actual executable
+        env:
+          PIXEL_LIVRE_EXE: ${{ github.workspace }}\dist\PixelLivre.exe
+        run: python -m pytest -m packaged --junitxml=packaged-results.xml
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v7
+        with:
+          name: pixel-livre-windows-x64
+          path: |
+            dist/PixelLivre.exe
+            dist/Pixel-Livre-*-windows-x64.zip
+            dist/SHA256SUMS.txt
+            packaged-results.xml
+          retention-days: 14

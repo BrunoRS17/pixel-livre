@@ -42,8 +42,11 @@ Abra `htmlcov/index.html` para visualizar o relatório HTML. Os relatórios e ca
 | `test_settings.py` | Valores padrão, persistência de formato/pasta e recuperação de formato inválido |
 | `test_ui.py` | Drop de arquivos/pastas, rejeição de URLs remotas, diálogo de saída, processamento real, restauração de controles, remoção da seleção e estado de erro |
 | `conftest.py` | Fixtures compartilhadas e encerramento seguro de threads/widgets |
+| `test_executable.py` | Binário independente, plugins Qt, codecs, interface, ZIP, arquitetura e checksums |
 
 São **35 casos coletados** nesta versão, incluindo os casos parametrizados. O resultado local de referência foi 35 aprovados e 91% de cobertura combinada de linhas e ramificações, em Windows / Python 3.12.14 / PySide6 6.12.0 / pytest 9.1.1. Valores podem variar com versões e instrumentação de threads nativas.
+
+Esse resultado é a referência da versão 0.2.0. Na 0.2.1 há mais três casos marcados `packaged`, executados quando `PIXEL_LIVRE_EXE` aponta para o binário gerado. Sem essa variável, esses três casos são ignorados explicitamente. Consulte [EMPACOTAMENTO.md](EMPACOTAMENTO.md) para gerar o executável e executar a bateria completa.
 
 ## Isolamento e decisões
 
@@ -60,6 +63,8 @@ São **35 casos coletados** nesta versão, incluindo os casos parametrizados. O 
 ## Integração contínua
 
 O workflow `Tests` executa em `windows-latest` com Python 3.11, 3.12 e 3.13. É disparado em pushes para `main`, pull requests ou execução manual. Cada combinação instala `requirements-dev.txt`, roda a suíte, exige 85% de cobertura e armazena JUnit/XML por 14 dias. O token tem somente `contents: read`.
+
+Após essa matriz, o job `Windows executable` gera uma compilação x64 e roda os três testes do pacote. O código de diagnóstico empacotado é verificado por esses subprocessos; ele não entra na cobertura do processo principal.
 
 O limite de cobertura deixa explícita uma proteção contra regressões de testes; não justifica escrever testes sem comportamento verificável só para aumentar o percentual. A execução de entrada (`application.py`) e alguns caminhos de integração com o sistema ainda têm cobertura limitada.
 

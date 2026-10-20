@@ -6,7 +6,7 @@
 
 Pixel Livre é um aplicativo desktop em Python para remover metadados embutidos de imagens em lote. Com uma interface em português, permite selecionar arquivos, conferir uma prévia e salvar cópias limpas em poucos cliques, preservando os originais. Todo o processamento acontece localmente, sem enviar imagens para servidores.
 
-**Versão 0.2.0:** [release e download do código-fonte](https://github.com/BrunoRS17/pixel-livre/releases/tag/v0.2.0) · [histórico de mudanças](CHANGELOG.md). Este release não inclui um executável independente.
+**Versão 0.2.1:** [baixar para Windows](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.2.1/Pixel-Livre-0.2.1-windows-x64.zip) · [release](https://github.com/BrunoRS17/pixel-livre/releases/tag/v0.2.1) · [histórico de mudanças](CHANGELOG.md).
 
 ## Recursos
 
@@ -21,7 +21,28 @@ Pixel Livre é um aplicativo desktop em Python para remover metadados embutidos 
 - Barra de progresso, resultado por arquivo e cancelamento do lote.
 - Cópias com nomes exclusivos, sem sobrescrever os arquivos existentes.
 
-## Instalação no Windows
+## Usar no Windows — sem instalar Python
+
+1. Baixe **[Pixel-Livre-0.2.1-windows-x64.zip](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.2.1/Pixel-Livre-0.2.1-windows-x64.zip)** na seção Assets do release.
+2. Clique com o botão direito no ZIP e escolha **Extrair Tudo**.
+3. Abra a pasta extraída e dê dois cliques em **PixelLivre.exe**.
+4. Arraste suas imagens, escolha a pasta de saída e clique em **Limpar imagens**.
+
+O pacote é portátil: não exige Python, pip, instalação ou execução como administrador. O interpretador, Qt e Pillow estão incluídos. A primeira abertura pode levar alguns segundos porque o executável extrai seus componentes em uma pasta temporária.
+
+Distribuição para **Windows x64**, validada localmente no Windows 11 e no runner Windows do GitHub. Não é uma compilação nativa para ARM64 nem para Windows de 32 bits. O pacote não possui assinatura digital de editor; o Windows pode mostrar um aviso de aplicativo desconhecido. Baixe apenas do release oficial e respeite as políticas de segurança do computador.
+
+O ZIP também contém `LEIA-ME.txt`, `BUILD-INFO.txt` (versões usadas na compilação) e licenças de componentes de terceiros. Não é necessário baixar os arquivos **Source code** para usar o aplicativo.
+
+Para conferir a integridade do download, compare o resultado com `SHA256SUMS.txt`, disponível no mesmo release:
+
+```powershell
+Get-FileHash .\Pixel-Livre-0.2.1-windows-x64.zip -Algorithm SHA256
+```
+
+Para atualizar, extraia o novo pacote em outra pasta e abra o novo executável. As preferências continuam no perfil do usuário; os arquivos originais e suas cópias não são movidos.
+
+## Executar pelo código-fonte — para desenvolvimento
 
 ### 1. Prepare o Python
 
@@ -31,7 +52,7 @@ Instale **Python 3.11 ou superior (64 bits)** pelo [site oficial do Python](http
 
 Nesta página do GitHub, clique em **Code → Download ZIP** e extraia a pasta. Abra um terminal dentro da pasta extraída, onde está o arquivo `requirements.txt`.
 
-Para baixar exatamente a versão 0.2.0, use **Source code (zip)** na página do release. O download pelo botão Code acompanha a versão atual de `main`.
+Para baixar exatamente a versão 0.2.1, use **Source code (zip)** na página do release. O download pelo botão Code acompanha a versão atual de `main`.
 
 ### 3. Instale as dependências
 
@@ -50,7 +71,7 @@ Dê dois cliques em **Iniciar.bat** ou execute:
 .\.venv\Scripts\python.exe app.py
 ```
 
-O iniciador usa preferencialmente o ambiente `.venv` do projeto. A distribuição contém código Python e requer a instalação acima; não inclui um executável independente. Esta versão foi validada no Windows. Também é possível iniciar com `python -m pixel_livre` no ambiente preparado.
+O iniciador `Iniciar.bat` usa preferencialmente o ambiente `.venv` do projeto e destina-se a quem baixou o código-fonte. Quem usa o pacote portátil abre diretamente `PixelLivre.exe`. Também é possível iniciar o código com `python -m pixel_livre` no ambiente preparado.
 
 **Atualizando uma instalação anterior:** execute novamente `.\.venv\Scripts\python.exe -m pip install -r requirements.txt` para instalar a nova dependência da interface.
 
@@ -104,11 +125,15 @@ Na validação local da versão 0.2.0, **35 testes passaram**, com **91% de cobe
 
 O GitHub Actions executa os testes em Windows com Python **3.11, 3.12 e 3.13** a cada push em `main` ou pull request. A integração exige ao menos **85% de cobertura**, e disponibiliza relatórios JUnit e XML por 14 dias. Consulte [o guia de testes](docs/TESTES.md) para filtros, fixtures, limitações e diagnóstico.
 
+A versão 0.2.1 acrescenta **três testes do pacote Windows**: execução com plugins Qt offscreen e Windows nativo, além de validação do ZIP, arquitetura x64 e checksums. Esses testes copiam somente o `.exe` para outra pasta, removem Python do PATH e verificam os codecs, a interface, a prévia, as preferências e o worker real. São executados após o build na CI; na suíte comum aparecem como ignorados se `PIXEL_LIVRE_EXE` não estiver definido. Veja [como gerar e testar o executável](docs/EMPACOTAMENTO.md).
+
+Na validação local da **v0.2.1**, foram **38 testes aprovados**, incluindo o pacote, e **90% de cobertura** do processo principal. O autoteste do binário é executado em subprocessos e não integra esse percentual.
+
 ## Stack e motivos das escolhas
 
 | Tecnologia | Onde usamos | Por que foi escolhida e qual o compromisso |
 | --- | --- | --- |
-| **Python 3.11+** | Aplicação e núcleo | Permite reaproveitar o script original, usar tipos e organizar serviços pequenos. A distribuição atual exige um interpretador instalado. A matriz de CI cobre 3.11–3.13. |
+| **Python 3.11+** | Aplicação e núcleo | Permite reaproveitar o script original, usar tipos e organizar serviços pequenos. O pacote Windows inclui o interpretador; somente o desenvolvimento exige Python instalado. A matriz de CI cobre 3.11–3.13. |
 | **Pillow** | Leitura, orientação, conversão e recriação dos pixels | Mantém a lógica de imagem em uma biblioteca só e suporta os formatos de entrada adotados. JPEG é recodificado; perfis ICC e alta profundidade não são preservados. Não substitui um validador de C2PA. |
 | **PySide6 Essentials / Qt Widgets** | Interface desktop e arrastar/soltar | Oferece controles, layouts, sinais e eventos de arquivos em uma única biblioteca. Substitui Tkinter para facilitar a evolução da interface. Essentials evita exigir módulos de navegador/multimídia, embora Qt ainda aumente o tamanho da instalação. |
 | **QThread + sinais Qt** | Execução dos lotes | Mantém o processamento fora da thread da interface e entrega resultados à janela. O lote é sequencial para limitar o consumo de memória; não busca paralelizar várias imagens. |
@@ -122,8 +147,9 @@ O GitHub Actions executa os testes em Windows com Python **3.11, 3.12 e 3.13** a
 | **GitHub Actions** | Validação de cada atualização | Reproduz os testes em diferentes versões de Python e guarda relatórios. O workflow tem apenas permissão de leitura e não publica releases automaticamente. |
 | **venv + pip + requirements** | Instalação e isolamento | Mantêm o fluxo simples para um aplicativo pequeno. Dependências de uso e desenvolvimento ficam separadas; os intervalos de versão permitem atualizações, sem constituir um lockfile reproduzível. |
 | **PowerShell / BAT** | Inicialização no Windows | Permitem abrir o ambiente preparado com dois cliques. São iniciadores, não instaladores nem executáveis empacotados. |
+| **PyInstaller** | Executável Windows portátil | Reúne o interpretador, bibliotecas e plugins Qt em um `.exe` sem console. O modo one-file facilita a distribuição e depende de extração temporária na abertura. O build ocorre no Windows, sem UPX e sem solicitar administrador. |
 
-Não há serviço web, conta obrigatória, banco de dados, modelo de IA ou envio de imagens para terceiros. ExifTool, OCR e empacotamento com PyInstaller não fazem parte desta versão.
+Não há serviço web, conta obrigatória, banco de dados, modelo de IA ou envio de imagens para terceiros. ExifTool e OCR não fazem parte desta versão.
 
 Referências: [Python](https://docs.python.org/3/), [Pillow](https://pillow.readthedocs.io/), [Qt for Python](https://doc.qt.io/qtforpython-6/), [pytest](https://docs.pytest.org/), [pytest-qt](https://pytest-qt.readthedocs.io/), [pytest-cov](https://pytest-cov.readthedocs.io/), [GitHub Actions](https://docs.github.com/en/actions).
 
@@ -142,6 +168,9 @@ Referências: [Python](https://docs.python.org/3/), [Pillow](https://pillow.read
 | `requirements-dev.txt` | Dependências adicionais de testes |
 | `pyproject.toml` | Configuração de pytest e cobertura |
 | `.github/workflows/tests.yml` | Matriz de testes no GitHub Actions |
+| `requirements-build.txt` / `packaging/PixelLivre.spec` | Dependências e configuração do executável |
+| `scripts/build_windows.py` | Build Windows, ZIP, licenças e checksums |
+| `pixel_livre/diagnostics.py` | Autoteste explícito do executável com dados sintéticos |
 | `tests/` | Testes de processamento e integração Qt |
 
 Veja [a documentação da arquitetura](docs/ARQUITETURA.md) para entender responsabilidades, fluxo de dados e como evoluir o projeto.
@@ -154,6 +183,8 @@ Veja [a documentação da arquitetura](docs/ARQUITETURA.md) para entender respon
 - **Arrastar não funciona:** solte arquivos locais na área tracejada. No Windows, evite executar o aplicativo como administrador quando o Explorador estiver sem elevação. Durante a limpeza a importação fica desabilitada.
 - **Não foi possível salvar:** escolha uma pasta em que seu usuário tenha permissão de escrita.
 - **Imagem rejeitada:** selecione o arquivo na lista e leia o erro na lateral; animações e arquivos com várias páginas não são aceitos.
+- **Executável demora a abrir:** aguarde a extração inicial e verifique espaço/permissão na pasta temporária do usuário.
+- **Windows ou antivírus bloqueou o executável:** confira origem, versão e checksum; não desative as proteções. Em um computador gerenciado, consulte o responsável.
 
 ## Contribuições
 

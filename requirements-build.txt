@@ -1,0 +1,3 @@
+# Build-only tools; runtime modules come from requirements.txt.
+-r requirements.txt
+PyInstaller==6.22.3

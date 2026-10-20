@@ -10,4 +10,6 @@ dist/
 coverage.xml
 htmlcov/
 test-results.xml
+packaged-results.xml
 .release-tools/
+.build-venv/

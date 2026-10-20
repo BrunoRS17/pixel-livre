@@ -1,5 +1,17 @@
 # Histórico de mudanças
 
+## 0.2.1 — 2026-10-20
+
+- Pacote portátil Windows x64, com executável que inclui Python, Qt e Pillow.
+- Build reproduzível pelo script `scripts/build_windows.py`, usando PyInstaller 6.22.3.
+- Recursos de versão do Windows, licenças de terceiros, informações de build e SHA-256.
+- Testes do próprio executável em pasta isolada e sem Python no PATH, usando plugins Qt offscreen e Windows.
+- Validação automatizada de arquitetura, conteúdo do ZIP e checksums.
+- Job de build/teste Windows no GitHub Actions.
+- Instruções para usuários sem Python e documentação de empacotamento.
+
+O pacote não é assinado digitalmente. O release 0.2.0 permanece disponível como distribuição anterior de código-fonte.
+
 ## 0.2.0 — 2026-10-19
 
 ### Novidades

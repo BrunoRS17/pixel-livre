@@ -5,12 +5,13 @@ qt_api = "pyside6"
 addopts = "-ra --strict-markers"
 markers = [
     "ui: integration tests using the Qt event loop (offscreen by default)",
+    "packaged: tests requiring PIXEL_LIVRE_EXE pointing to a Windows executable",
 ]
 
 [tool.coverage.run]
 branch = true
 source = ["pixel_livre"]
-omit = ["pixel_livre/__main__.py"]
+omit = ["pixel_livre/__main__.py", "pixel_livre/diagnostics.py"]
 
 [tool.coverage.report]
 show_missing = true

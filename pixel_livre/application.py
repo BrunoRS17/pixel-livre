@@ -7,6 +7,9 @@ from .ui.window import MainWindow
 
 
 def main() -> int:
+    if len(sys.argv) == 3 and sys.argv[1] == '--self-test-dir':
+        from .diagnostics import run_self_test
+        return run_self_test(sys.argv[2])
     application = QApplication(sys.argv)
     application.setApplicationName('Pixel Livre')
     application.setStyle('Fusion')
