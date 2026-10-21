@@ -29,6 +29,9 @@ def run_self_test(directory: str) -> int:
     app = None
     window = None
     privacy_dialog = None
+    redaction_dialog = None
+    privacy_checked = False
+    redaction_started = False
     try:
         source = root / 'imagem com acentuação.png'
         metadata = PngImagePlugin.PngInfo()
@@ -59,22 +62,44 @@ def run_self_test(directory: str) -> int:
         finished = False
 
         def inspect():
-            nonlocal finished, privacy_dialog
+            nonlocal finished, privacy_dialog, redaction_dialog, privacy_checked, redaction_started
             if window.busy or finished:
                 return
             if privacy_dialog is None:
                 window.show_privacy()
                 privacy_dialog = window.privacy_dialog
                 return
-            if not privacy_dialog.close_button.isEnabled():
+            if not privacy_checked and not privacy_dialog.close_button.isEnabled():
                 return
-            finished = True
             try:
-                assert 'Synthetic test' in privacy_dialog.details.toPlainText()
-                assert 'campo(s)' in privacy_dialog.heading.text()
-                privacy_dialog.grab().save(str(root / 'privacy.png'))
-                privacy_dialog.close()
-                report['checks'].append('privacy-dialog')
+                if not privacy_checked:
+                    assert 'Synthetic test' in privacy_dialog.details.toPlainText()
+                    assert 'campo(s)' in privacy_dialog.heading.text()
+                    privacy_dialog.grab().save(str(root / 'privacy.png'))
+                    privacy_dialog.close()
+                    privacy_checked = True
+                    report['checks'].append('privacy-dialog')
+                    window.show_redaction()
+                    redaction_dialog = window.redaction_dialog
+                    return
+                if redaction_dialog.working:
+                    return
+                if not redaction_started:
+                    assert redaction_dialog.image is not None
+                    redaction_dialog.canvas.regions.append((5, 5, 20, 15))
+                    redaction_dialog.export_to(str(root / 'redacted'))
+                    redaction_started = True
+                    return
+                assert redaction_dialog.output is not None
+                with Image.open(redaction_dialog.output) as redacted:
+                    assert redacted.getpixel((10, 10)) == (0, 0, 0, 255)
+                    assert redacted.getpixel((30, 18)) == (20, 60, 120, 128)
+                    assert not redacted.info
+                assert source.read_bytes() == original_bytes
+                redaction_dialog.grab().save(str(root / 'redaction.png'))
+                redaction_dialog.close()
+                report['checks'].append('redaction-export')
+                finished = True
                 assert (root / 'gui-output' / 'imagem com acentuação_limpa.png').is_file()
                 assert '1 salva(s)' in window.view.status.text()
                 assert window.view.start.isEnabled()
@@ -107,9 +132,14 @@ def run_self_test(directory: str) -> int:
     finally:
         if privacy_dialog is not None:
             # Retained by the Qt parent until deferred deletion is processed.
-            if not finished:
+            if not privacy_checked:
                 privacy_dialog.worker.wait()
                 privacy_dialog.close()
+        if redaction_dialog is not None and not finished:
+            if redaction_dialog.task is not None:
+                redaction_dialog.task.wait()
+                app.processEvents()
+            redaction_dialog.close()
         if window is not None:
             if window.worker is not None:
                 window.worker.cancel_requested.set()

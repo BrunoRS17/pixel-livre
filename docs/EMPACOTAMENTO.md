@@ -2,7 +2,7 @@
 
 ## Distribuição
 
-O release v0.2.1 contém `Pixel-Livre-0.2.1-windows-x64.zip` e `SHA256SUMS.txt`. O ZIP inclui `PixelLivre.exe`, instruções, versões das dependências de build e licenças de terceiros. Extraia o ZIP e abra o executável. O usuário final não precisa instalar Python.
+O release v0.4.0 contém `Pixel-Livre-0.4.0-windows-x64.zip` e `SHA256SUMS.txt`. O ZIP inclui `PixelLivre.exe`, instruções, versões das dependências de build e licenças de terceiros. Extraia o ZIP e abra o executável. O usuário final não precisa instalar Python.
 
 O arquivo é gerado com PyInstaller em modo `onefile` e `windowed`, sem UPX e sem elevação de administrador. Os módulos Python, DLLs do Qt/Pillow e o interpretador são extraídos temporariamente pelo bootloader. O build é específico para Windows x64; não é um instalador nem um pacote ARM64.
 
@@ -65,3 +65,5 @@ Após a suíte funcional, o build local, os testes do pacote e os jobs de CI pas
 - Verifique os tamanhos e hashes dos anexos publicados.
 
 O job `Windows executable` mantém uma compilação independente nos artefatos de CI por 14 dias. A distribuição permanente fica nos anexos do release.
+
+Na validação da v0.4.0, 62 testes passaram com 91,82% de cobertura do processo principal. O binário também abriu o Raio-X e exportou uma cópia PNG com região coberta, verificando os pixels e os metadados.

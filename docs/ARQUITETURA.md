@@ -52,3 +52,9 @@ Validação visual: janela padrão e tamanho mínimo (940 × 720), estado vazio,
 - `MainWindow`: habilita o botão para uma única imagem, fora de uma limpeza em andamento.
 
 Referência de API: https://pillow.readthedocs.io/en/stable/reference/Image.html (getexif/get_ifd).
+
+## Editor de ocultação (0.4.0)
+
+`core/redaction.py` carrega um snapshot RGBA sem metadados com orientação EXIF aplicada. As regiões são caixas inteiras com limite direito/inferior exclusivo, validadas antes da escrita. `export_redacted` substitui pixels por preto opaco e reutiliza a gravação exclusiva de `core/cleaning.py`.
+
+`ui/redaction.py` contém o canvas Qt, o diálogo e o worker de I/O. O canvas mapeia coordenadas da janela para pixels da imagem, recorta aos limites e arredonda para fora. Zoom e rolagem não mudam as coordenadas salvas. Exportar usa o snapshot da prévia; alterações posteriores no arquivo de origem não deslocam as marcações. O PNG final não contém camadas de edição.

@@ -104,6 +104,8 @@ class WindowView(QWidget):
         self.privacy = QPushButton('Raio-X da Privacidade')
         self.privacy.setToolTip('Veja os metadados da imagem selecionada, sem modificar o arquivo')
         panel.addWidget(self.privacy)
+        self.redact = QPushButton('Ocultar informações visíveis')
+        panel.addWidget(self.redact)
         panel.addWidget(label('Onde salvar', 'section'))
         self.destination = QLineEdit()
         self.destination.setPlaceholderText('Escolha uma pasta de destino')

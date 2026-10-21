@@ -1,5 +1,13 @@
 # Histórico de mudanças
 
+## 0.4.0 — 2026-10-21
+
+- Editor de ocultação com seleção de várias regiões, cobertura preta opaca, zoom, desfazer e limpar marcações.
+- Exportação PNG sem metadados, sem sobrescrita e com pixels cobertos substituídos permanentemente na cópia.
+- Prévia e exportação usam o mesmo snapshot orientado, preservando o original.
+- Testes de coordenadas, orientação EXIF, transparência, regiões inválidas e exportação no executável.
+- Inclui o Raio-X da Privacidade e seu tema claro, introduzidos na versão 0.3.0.
+
 ## 0.3.0 — 2026-10-21 (sem release publicado)
 
 - Raio-X da Privacidade: análise local dos metadados da imagem selecionada, com categorias e explicações.

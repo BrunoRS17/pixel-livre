@@ -4,11 +4,14 @@
 
 **Seus pixels ficam. Os metadados vão.**
 
-Pixel Livre é um aplicativo desktop em Python para remover metadados embutidos de imagens em lote. Com uma interface em português, permite selecionar arquivos, conferir uma prévia e salvar cópias limpas em poucos cliques, preservando os originais. Todo o processamento acontece localmente, sem enviar imagens para servidores.
+Pixel Livre é um aplicativo desktop em Python para inspecionar e remover metadados de imagens e ocultar informações visíveis antes de compartilhar. Com uma interface em português, permite selecionar arquivos, conferir uma prévia e salvar cópias limpas em poucos cliques, preservando os originais. Todo o processamento acontece localmente, sem enviar imagens para servidores.
 
-**Versão 0.2.1:** [baixar para Windows](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.2.1/Pixel-Livre-0.2.1-windows-x64.zip) · [release](https://github.com/BrunoRS17/pixel-livre/releases/tag/v0.2.1) · [histórico de mudanças](CHANGELOG.md).
+**Versão 0.4.0:** [baixar para Windows](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.4.0/Pixel-Livre-0.4.0-windows-x64.zip) · [release](https://github.com/BrunoRS17/pixel-livre/releases/tag/v0.4.0) · [histórico de mudanças](CHANGELOG.md).
 
 ## Recursos
+
+- Ocultação manual de regiões com cobertura preta opaca, zoom e desfazer.
+- Raio-X da Privacidade com categorias e explicações dos metadados encontrados.
 
 - Interface moderna em PySide6, com painéis de importação e exportação.
 - Arrastar e soltar imagens ou pastas do Explorador de Arquivos.
@@ -23,7 +26,7 @@ Pixel Livre é um aplicativo desktop em Python para remover metadados embutidos 
 
 ## Usar no Windows — sem instalar Python
 
-1. Baixe **[Pixel-Livre-0.2.1-windows-x64.zip](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.2.1/Pixel-Livre-0.2.1-windows-x64.zip)** na seção Assets do release.
+1. Baixe **[Pixel-Livre-0.4.0-windows-x64.zip](https://github.com/BrunoRS17/pixel-livre/releases/download/v0.4.0/Pixel-Livre-0.4.0-windows-x64.zip)** na seção Assets do release.
 2. Clique com o botão direito no ZIP e escolha **Extrair Tudo**.
 3. Abra a pasta extraída e dê dois cliques em **PixelLivre.exe**.
 4. Arraste suas imagens, escolha a pasta de saída e clique em **Limpar imagens**.
@@ -37,7 +40,7 @@ O ZIP também contém `LEIA-ME.txt`, `BUILD-INFO.txt` (versões usadas na compil
 Para conferir a integridade do download, compare o resultado com `SHA256SUMS.txt`, disponível no mesmo release:
 
 ```powershell
-Get-FileHash .\Pixel-Livre-0.2.1-windows-x64.zip -Algorithm SHA256
+Get-FileHash .\Pixel-Livre-0.4.0-windows-x64.zip -Algorithm SHA256
 ```
 
 Para atualizar, extraia o novo pacote em outra pasta e abra o novo executável. As preferências continuam no perfil do usuário; os arquivos originais e suas cópias não são movidos.
@@ -52,7 +55,7 @@ Instale **Python 3.11 ou superior (64 bits)** pelo [site oficial do Python](http
 
 Nesta página do GitHub, clique em **Code → Download ZIP** e extraia a pasta. Abra um terminal dentro da pasta extraída, onde está o arquivo `requirements.txt`.
 
-Para baixar exatamente a versão 0.2.1, use **Source code (zip)** na página do release. O download pelo botão Code acompanha a versão atual de `main`.
+Para baixar exatamente a versão 0.4.0, use **Source code (zip)** na página do release. O download pelo botão Code acompanha a versão atual de `main`.
 
 ### 3. Instale as dependências
 
@@ -125,9 +128,9 @@ Na validação local da versão 0.2.0, **35 testes passaram**, com **91% de cobe
 
 O GitHub Actions executa os testes em Windows com Python **3.11, 3.12 e 3.13** a cada push em `main` ou pull request. A integração exige ao menos **85% de cobertura**, e disponibiliza relatórios JUnit e XML por 14 dias. Consulte [o guia de testes](docs/TESTES.md) para filtros, fixtures, limitações e diagnóstico.
 
-A versão 0.2.1 acrescenta **três testes do pacote Windows**: execução com plugins Qt offscreen e Windows nativo, além de validação do ZIP, arquitetura x64 e checksums. Esses testes copiam somente o `.exe` para outra pasta, removem Python do PATH e verificam os codecs, a interface, a prévia, as preferências e o worker real. São executados após o build na CI; na suíte comum aparecem como ignorados se `PIXEL_LIVRE_EXE` não estiver definido. Veja [como gerar e testar o executável](docs/EMPACOTAMENTO.md).
+A versão 0.4.0 acrescenta **três testes do pacote Windows**: execução com plugins Qt offscreen e Windows nativo, além de validação do ZIP, arquitetura x64 e checksums. Esses testes copiam somente o `.exe` para outra pasta, removem Python do PATH e verificam os codecs, a interface, a prévia, as preferências e o worker real. São executados após o build na CI; na suíte comum aparecem como ignorados se `PIXEL_LIVRE_EXE` não estiver definido. Veja [como gerar e testar o executável](docs/EMPACOTAMENTO.md).
 
-Na validação local da **v0.2.1**, foram **38 testes aprovados**, incluindo o pacote, e **90% de cobertura** do processo principal. O autoteste do binário é executado em subprocessos e não integra esse percentual.
+Na validação local da **v0.4.0**, foram **62 testes aprovados**, incluindo o pacote, e **91,82% de cobertura** do processo principal. O autoteste do binário é executado em subprocessos e não integra esse percentual.
 
 ## Stack e motivos das escolhas
 
@@ -194,10 +197,22 @@ Antes de enviar uma contribuição, instale `requirements-dev.txt`, execute `pyt
 
 ## Raio-X da Privacidade
 
-Na versão 0.3.0, selecione **uma imagem** na lista e clique em **Raio-X da Privacidade**, abaixo da prévia. O painel mostra os campos encontrados, seus valores e uma explicação do que podem revelar: localização GPS, identificação/autoria, datas, dispositivo e software, além de outros metadados.
+Selecione **uma imagem** na lista e clique em **Raio-X da Privacidade**, abaixo da prévia. O painel mostra os campos encontrados, seus valores e uma explicação do que podem revelar: localização GPS, identificação/autoria, datas, dispositivo e software, além de outros metadados.
 
 A leitura é local, executada em segundo plano e não altera o arquivo. Não há envio para serviços externos nem gravação automática do relatório. Valores extensos são abreviados; blocos binários são identificados pelo tamanho. O conteúdo é exibido como texto literal.
 
 O analisador usa Pillow, já presente no projeto, para EXIF (incluindo os diretórios de GPS e captura), texto PNG e presença de blocos XMP, Photoshop, comentários e ICC. Não é uma auditoria completa: campos proprietários e o conteúdo interno de blocos binários podem não ser interpretados; somente a primeira página/imagem é examinada. Rostos, textos visíveis, esteganografia e credenciais C2PA não são analisados. A ausência de achados não garante anonimato. Erros e leituras parciais são apresentados explicitamente.
 
-Para comparar antes/depois, limpe a imagem, adicione a cópia de saída à lista e execute o Raio-X novamente. O executável do release v0.2.1 é anterior a esta funcionalidade; a versão 0.3.0 está disponível pelo código-fonte e pelo artefato `pixel-livre-windows-x64` da execução mais recente concluída com sucesso em [GitHub Actions](https://github.com/BrunoRS17/pixel-livre/actions). Para baixar artefatos, entre na sua conta GitHub. Eles ficam disponíveis por 14 dias; nenhum novo release foi publicado.
+Para comparar antes/depois, limpe a imagem, adicione a cópia de saída à lista e execute o Raio-X novamente. O release v0.4.0 inclui o Raio-X e a ferramenta de ocultação.
+
+## Ocultar informações visíveis
+
+1. Adicione uma imagem e selecione somente ela na lista.
+2. Clique em **Ocultar informações visíveis**.
+3. Arraste sobre nomes, rostos, placas ou outros detalhes para marcar retângulos pretos. É possível marcar várias regiões, usar **+ Zoom**, **− Zoom**, rolar a imagem ampliada e **Ajustar** a imagem à janela.
+4. Use **Desfazer** para remover a última região ou **Limpar marcações** para recomeçar.
+5. Clique em **Salvar cópia protegida** e escolha a pasta. A cópia recebe o sufixo `_oculta.png`; arquivos existentes não são sobrescritos.
+
+A exportação usa PNG sem perdas, independentemente do formato escolhido na tela principal. A cobertura preta é opaca e substitui os pixels selecionados, inclusive em imagens transparentes. O arquivo exportado contém apenas a imagem final, sem camadas reversíveis ou metadados copiados do original. A orientação EXIF é aplicada antes da marcação, e as dimensões são preservadas.
+
+O original permanece intacto. Marcações são temporárias e não são guardadas ao fechar o editor. A seleção é manual: confira as bordas, amplie detalhes pequenos e cubra a informação inteira antes de compartilhar **a cópia**. Não há detecção automática de dados pessoais. Arquivos animados ou com várias páginas são recusados.

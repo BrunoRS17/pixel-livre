@@ -87,3 +87,7 @@ Se um ambiente restrito bloquear a pasta temporária padrão, execute com `--bas
 ## Testes do Raio-X
 
 `tests/test_privacy.py` cria imagens sintéticas com autoria, aparelho, serial, data, GPS e texto/XMP. Verifica a preservação byte a byte do original, ausência de achados após limpeza PNG/JPEG/WebP, arquivos inválidos, EXIF ilegível, ICC, limite de valores e aviso para múltiplas páginas. A integração Qt verifica abertura assíncrona, texto literal, estado vazio, falha e proteção ao fechar durante leitura.
+
+## Testes de ocultação (0.4.0)
+
+`tests/test_redaction.py` verifica substituição pixel a pixel, alpha opaco, pixels externos preservados, orientação, snapshot independente do arquivo, colisão de nomes, rejeição de caixas inválidas e arquivos com várias páginas. Eventos Qt exercitam arraste reverso, zoom, recorte nos limites, desfazer, limpar, cancelar pasta, falhas de exportação e proteção contra fechamento durante I/O. O teste do executável também valida a exportação de uma região e a ausência de metadados no PNG resultante.

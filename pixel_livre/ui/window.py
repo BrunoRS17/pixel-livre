@@ -13,6 +13,7 @@ from pixel_livre.settings import Preferences
 from .view import WindowView
 from .worker import CleaningWorker
 from .privacy import PrivacyDialog
+from .redaction import RedactionDialog
 
 
 class MainWindow(QMainWindow):
@@ -40,6 +41,7 @@ class MainWindow(QMainWindow):
         v.cancel.clicked.connect(self.cancel_batch)
         v.open_folder.clicked.connect(self.open_output_folder)
         v.privacy.clicked.connect(self.show_privacy)
+        v.redact.clicked.connect(self.show_redaction)
         v.table.itemSelectionChanged.connect(self.show_preview)
         v.destination.textChanged.connect(self.refresh)
         v.output_format.currentIndexChanged.connect(self.update_format_hint)
@@ -162,6 +164,15 @@ class MainWindow(QMainWindow):
         self.privacy_dialog.open()
 
     @Slot()
+    def show_redaction(self) -> None:
+        selected = self.view.table.selectionModel().selectedRows()
+        if self.busy or len(selected) != 1:
+            return
+        self.redaction_dialog = RedactionDialog(self.paths[selected[0].row()], self.view.destination.text(), self)
+        self.redaction_dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        self.redaction_dialog.open()
+
+    @Slot()
     def refresh(self) -> None:
         v = self.view
         v.count.setText(f'Sua seleção · {len(self.paths)}')
@@ -169,6 +180,7 @@ class MainWindow(QMainWindow):
         v.start.setEnabled(bool(self.paths) and bool(v.destination.text().strip()) and not self.busy)
         v.remove.setEnabled(bool(v.table.selectedIndexes()) and not self.busy)
         v.privacy.setEnabled(len(v.table.selectionModel().selectedRows()) == 1 and not self.busy)
+        v.redact.setEnabled(v.privacy.isEnabled())
         v.destination.setToolTip(v.destination.text())
 
     def set_busy(self, busy: bool) -> None:

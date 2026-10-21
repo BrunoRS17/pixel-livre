@@ -32,6 +32,11 @@ def clean_image(source: Path, destination: Path, output_format: str = 'PNG') -> 
                 converted = background
             # Copiar apenas os pixels impede a propagação de EXIF, XMP e outros campos.
             clean = Image.frombytes(converted.mode, converted.size, converted.tobytes())
+    return save_pixels(clean, source.stem + '_limpa', destination, output_format)
+
+
+def save_pixels(clean: Image.Image, stem: str, destination: Path, output_format: str) -> Path:
+    """Save owned pixel image exclusively; always close it, removing failed output."""
     destination.mkdir(parents=True, exist_ok=True)
     extension = {'PNG': '.png', 'JPEG': '.jpg', 'WEBP': '.webp'}[output_format]
     options = {'quality': 95, 'subsampling': 0} if output_format == 'JPEG' else {}
@@ -40,7 +45,7 @@ def clean_image(source: Path, destination: Path, output_format: str = 'PNG') -> 
     index = 0
     while True:
         suffix = '' if index == 0 else f'_{index}'
-        target = destination / f'{source.stem}_limpa{suffix}{extension}'
+        target = destination / f'{stem}{suffix}{extension}'
         try:
             handle = target.open('xb')
             break
