@@ -191,3 +191,13 @@ Veja [a documentação da arquitetura](docs/ARQUITETURA.md) para entender respon
 Sugestões e relatos de problemas são bem-vindos nas Issues. Inclua a versão do Python, o formato da imagem e a mensagem de erro. Evite anexar imagens com dados pessoais; prefira um exemplo fictício que reproduza o problema.
 
 Antes de enviar uma contribuição, instale `requirements-dev.txt`, execute `python -m pytest` e inclua testes para mudanças de comportamento. Siga [a arquitetura](docs/ARQUITETURA.md) para manter o processamento separado da apresentação.
+
+## Raio-X da Privacidade
+
+Na versão 0.3.0, selecione **uma imagem** na lista e clique em **Raio-X da Privacidade**, abaixo da prévia. O painel mostra os campos encontrados, seus valores e uma explicação do que podem revelar: localização GPS, identificação/autoria, datas, dispositivo e software, além de outros metadados.
+
+A leitura é local, executada em segundo plano e não altera o arquivo. Não há envio para serviços externos nem gravação automática do relatório. Valores extensos são abreviados; blocos binários são identificados pelo tamanho. O conteúdo é exibido como texto literal.
+
+O analisador usa Pillow, já presente no projeto, para EXIF (incluindo os diretórios de GPS e captura), texto PNG e presença de blocos XMP, Photoshop, comentários e ICC. Não é uma auditoria completa: campos proprietários e o conteúdo interno de blocos binários podem não ser interpretados; somente a primeira página/imagem é examinada. Rostos, textos visíveis, esteganografia e credenciais C2PA não são analisados. A ausência de achados não garante anonimato. Erros e leituras parciais são apresentados explicitamente.
+
+Para comparar antes/depois, limpe a imagem, adicione a cópia de saída à lista e execute o Raio-X novamente. O executável do release v0.2.1 é anterior a esta funcionalidade; a versão 0.3.0 está disponível pelo código-fonte e pelo artefato `pixel-livre-windows-x64` da execução mais recente concluída com sucesso em [GitHub Actions](https://github.com/BrunoRS17/pixel-livre/actions). Para baixar artefatos, entre na sua conta GitHub. Eles ficam disponíveis por 14 dias; nenhum novo release foi publicado.

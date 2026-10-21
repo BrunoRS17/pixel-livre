@@ -1,5 +1,13 @@
 # Histórico de mudanças
 
+## 0.3.0 — 2026-10-21 (sem release publicado)
+
+- Raio-X da Privacidade: análise local dos metadados da imagem selecionada, com categorias e explicações.
+- Leitura em segundo plano, exibição literal de valores e indicação de análises incompletas.
+- Testes de GPS, autoria, datas, dispositivo, comparação após limpeza e integração da interface.
+- Visual do Raio-X alinhado ao tema claro do aplicativo, inclusive no Windows com tema escuro.
+- Executável atualizado e teste do diálogo de privacidade no próprio pacote.
+
 ## 0.2.1 — 2026-10-20
 
 - Pacote portátil Windows x64, com executável que inclui Python, Qt e Pillow.

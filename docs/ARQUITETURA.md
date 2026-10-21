@@ -44,3 +44,11 @@ Instale `requirements-dev.txt` e execute `.\.venv\Scripts\python.exe -m pytest` 
 Para adicionar um novo formato, atualize o núcleo, os testes de metadados/transparência e a seleção da interface. Para mudar o visual, concentre as alterações em theme, components e view. Novos serviços devem retornar dados e resultados; diálogos e mensagens pertencem à apresentação.
 
 Validação visual: janela padrão e tamanho mínimo (940 × 720), estado vazio, seleção, progresso e conclusão. O teste automatizado de drop valida o contrato de eventos Qt; o gesto real no Explorador também deve ser conferido em cada distribuição Windows.
+
+## Raio-X da Privacidade
+
+- `core/privacy.py`: modelos imutáveis `Finding`/`PrivacyReport` e inspeção somente leitura, independente de Qt. Classificação descritiva por campo, sem pontuação de segurança.
+- `ui/privacy.py`: worker de leitura e diálogo com texto literal, avisos e proteção contra encerramento durante a análise. Não persiste dados sensíveis nem faz chamadas de rede.
+- `MainWindow`: habilita o botão para uma única imagem, fora de uma limpeza em andamento.
+
+Referência de API: https://pillow.readthedocs.io/en/stable/reference/Image.html (getexif/get_ifd).

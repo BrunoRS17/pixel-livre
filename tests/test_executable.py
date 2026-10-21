@@ -74,9 +74,10 @@ def test_standalone_export_without_python_on_path(executable, tmp_path, qt_platf
     assert report['version'] == __version__
     assert set(report['checks']) == {
         'codec-png', 'codec-jpeg', 'codec-webp', 'original-preserved',
-        'qt-window', 'preview', 'gui-worker-export', 'preferences',
+        'qt-window', 'preview', 'gui-worker-export', 'preferences', 'privacy-dialog',
     }
     assert (report_dir / 'window.png').stat().st_size > 0
+    assert (report_dir / 'privacy.png').stat().st_size > 0
 
 
 def test_release_archive_and_checksums():

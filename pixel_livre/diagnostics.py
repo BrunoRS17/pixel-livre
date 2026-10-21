@@ -28,6 +28,7 @@ def run_self_test(directory: str) -> int:
     }
     app = None
     window = None
+    privacy_dialog = None
     try:
         source = root / 'imagem com acentuação.png'
         metadata = PngImagePlugin.PngInfo()
@@ -58,11 +59,22 @@ def run_self_test(directory: str) -> int:
         finished = False
 
         def inspect():
-            nonlocal finished
+            nonlocal finished, privacy_dialog
             if window.busy or finished:
+                return
+            if privacy_dialog is None:
+                window.show_privacy()
+                privacy_dialog = window.privacy_dialog
+                return
+            if not privacy_dialog.close_button.isEnabled():
                 return
             finished = True
             try:
+                assert 'Synthetic test' in privacy_dialog.details.toPlainText()
+                assert 'campo(s)' in privacy_dialog.heading.text()
+                privacy_dialog.grab().save(str(root / 'privacy.png'))
+                privacy_dialog.close()
+                report['checks'].append('privacy-dialog')
                 assert (root / 'gui-output' / 'imagem com acentuação_limpa.png').is_file()
                 assert '1 salva(s)' in window.view.status.text()
                 assert window.view.start.isEnabled()
@@ -93,6 +105,11 @@ def run_self_test(directory: str) -> int:
     except Exception as error:
         report['error'] = f'{type(error).__name__}: {error}'
     finally:
+        if privacy_dialog is not None:
+            # Retained by the Qt parent until deferred deletion is processed.
+            if not finished:
+                privacy_dialog.worker.wait()
+                privacy_dialog.close()
         if window is not None:
             if window.worker is not None:
                 window.worker.cancel_requested.set()

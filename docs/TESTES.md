@@ -83,3 +83,7 @@ Se um ambiente restrito bloquear a pasta temporária padrão, execute com `--bas
 3. Publique o commit em `main` e aguarde a matriz do workflow `Tests` terminar com sucesso.
 4. Crie a tag `vX.Y.Z` no commit validado e publique o GitHub Release com notas e limitações.
 5. Confira que tag, release e código apontam para o mesmo commit. Os arquivos Source code são gerados pelo GitHub; um executável exigiria empacotamento e validação separados.
+
+## Testes do Raio-X
+
+`tests/test_privacy.py` cria imagens sintéticas com autoria, aparelho, serial, data, GPS e texto/XMP. Verifica a preservação byte a byte do original, ausência de achados após limpeza PNG/JPEG/WebP, arquivos inválidos, EXIF ilegível, ICC, limite de valores e aviso para múltiplas páginas. A integração Qt verifica abertura assíncrona, texto literal, estado vazio, falha e proteção ao fechar durante leitura.

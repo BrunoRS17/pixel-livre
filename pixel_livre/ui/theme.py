@@ -2,6 +2,8 @@
 STYLESHEET = '''
 QWidget { font-family: 'Segoe UI'; font-size: 13px; color: #243249; }
 QMainWindow, QWidget#root { background: #f3f5fa; }
+QDialog#privacyDialog { background: #f3f5fa; color: #243249; }
+QTextBrowser#privacyResults { background: #ffffff; color: #243249; border: 1px solid #e2e7f0; border-radius: 12px; padding: 16px; font-size: 14px; selection-background-color: #5365d9; selection-color: #ffffff; }
 QFrame#card { background: #ffffff; border: 1px solid #e2e7f0; border-radius: 16px; }
 QLabel { background: transparent; border: none; }
 QLabel#brand { font-size: 26px; font-weight: 800; color: #192b49; }
